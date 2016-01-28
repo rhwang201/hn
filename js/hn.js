@@ -150,8 +150,10 @@ $(document.body).on('keydown', function(e) {
   log('At element i=' + element_index);
 });
 $(document.body).on('keyup', function(e) {
-  var i = pressedKeys.indexOf(e.keyCode);
-  if (i > -1) {
-    pressedKeys.splice(i, 1);
+  if (COMMAND_KEYS.indexOf(e.keyCode) > -1) {
+    var i = pressedKeys.indexOf(COMMAND);
+    if (i > -1) {
+      pressedKeys.splice(i, 1);
+    }
   }
 });
