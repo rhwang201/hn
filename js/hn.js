@@ -2,8 +2,6 @@
 // TODO scroll if at bottom?
 // TODO Remember position
 
-// TODO Navigate comments
-
 var DEBUG = false;
 function log(msg) {
   if (DEBUG) {
@@ -52,31 +50,12 @@ function highlightTableRows(table, index) {
  * Auto-scrolls the page.
  */
 function scrollIfNecessary(table, index, direction) {
-  return;
-
   var rows = table.find("tr");
-  var row_index = index * 3 + 3 * (direction === DOWN ? 1 : -1) * SCROLLOFF;
+  var row_index = index * 3;
   var row = rows[row_index];
 
-  if (!isScrolledIntoView(row)) {
-    $('html, body').animate({
-      scrollTop: $(row).offset().top
-    }, 100);
-  }
-}
-
-function isScrolledIntoView(elem) {
-    var $elem = $(elem);
-    var $window = $(window);
-
-    var docViewTop = $window.scrollTop();
-    var docViewBottom = docViewTop + $window.height();
-
-    var elemTop = $elem.offset().top;
-    var elemBottom = elemTop + $elem.height();
-
-    return elemTop > docViewBottom;
-    //return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+  var top = $(row).offset().top - (window.innerHeight / 2);
+  $('html, body').animate({ scrollTop: top }, 1);
 }
 
 /**
@@ -114,46 +93,48 @@ function openComments(table, index, isCommandPressed) {
 
 
 // Begin main.
-var table = $(".itemlist");
+$(document).ready(function() {
+  var table = $(".itemlist");
 
-var element_index = 0;
+  var element_index = 0;
 
-highlightTableRows(table, element_index);
+  highlightTableRows(table, element_index);
 
-var pressedKeys = [];
-$(document.body).on('keydown', function(e) {
-  var keyCode = e.keyCode;
-  if (COMMAND_KEYS.indexOf(keyCode) > -1) {
-    pressedKeys.push(COMMAND);
-  }
-
-  var isCommandPressed = pressedKeys.indexOf(COMMAND) > -1;
-  switch (keyCode) {
-    case DOWN_KEY:
-      element_index = Math.min(element_index + 1, NUMBER_ROWS_PER_PAGE - 1);
-      highlightTableRows(table, element_index);
-      scrollIfNecessary(table, element_index, DOWN);
-      break;
-    case UP_KEY:
-      element_index = Math.max(element_index - 1, 0);
-      highlightTableRows(table, element_index);
-      scrollIfNecessary(table, element_index, UP);
-      break;
-    case OPEN_LINK_KEY:
-      openLink(table, element_index, isCommandPressed);
-      break;
-    case OPEN_COMMENTS_KEY:
-      openComments(table, element_index, isCommandPressed);
-      break;
-  }
-
-  log('At element i=' + element_index);
-});
-$(document.body).on('keyup', function(e) {
-  if (COMMAND_KEYS.indexOf(e.keyCode) > -1) {
-    var i = pressedKeys.indexOf(COMMAND);
-    if (i > -1) {
-      pressedKeys.splice(i, 1);
+  var pressedKeys = [];
+  $(document.body).on('keydown', function(e) {
+    var keyCode = e.keyCode;
+    if (COMMAND_KEYS.indexOf(keyCode) > -1) {
+      pressedKeys.push(COMMAND);
     }
-  }
+
+    var isCommandPressed = pressedKeys.indexOf(COMMAND) > -1;
+    switch (keyCode) {
+      case DOWN_KEY:
+        element_index = Math.min(element_index + 1, NUMBER_ROWS_PER_PAGE - 1);
+        highlightTableRows(table, element_index);
+        scrollIfNecessary(table, element_index, DOWN);
+        break;
+      case UP_KEY:
+        element_index = Math.max(element_index - 1, 0);
+        highlightTableRows(table, element_index);
+        scrollIfNecessary(table, element_index, UP);
+        break;
+      case OPEN_LINK_KEY:
+        openLink(table, element_index, isCommandPressed);
+        break;
+      case OPEN_COMMENTS_KEY:
+        openComments(table, element_index, isCommandPressed);
+        break;
+    }
+
+    log('At element i=' + element_index);
+  });
+  $(document.body).on('keyup', function(e) {
+    if (COMMAND_KEYS.indexOf(e.keyCode) > -1) {
+      var i = pressedKeys.indexOf(COMMAND);
+      if (i > -1) {
+        pressedKeys.splice(i, 1);
+      }
+    }
+  });
 });
