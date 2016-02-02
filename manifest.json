@@ -12,7 +12,7 @@
       "js": ["bower_components/jquery/dist/jquery.min.js", "js/hn.js"]
     },
     {
-      "matches": ["https://news.ycombinator.com/best"],
+      "matches": ["https://news.ycombinator.com/best*"],
       "js": ["bower_components/jquery/dist/jquery.min.js", "js/hn.js"]
     },
     {

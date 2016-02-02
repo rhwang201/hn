@@ -1,6 +1,4 @@
-// TODO es6
-// TODO scroll if at bottom?
-// TODO Remember position
+// TODO scroll to more
 
 var DEBUG = false;
 function log(msg) {
