@@ -1,3 +1,5 @@
+// TODO help
+
 var DEBUG = false;
 function log(msg) {
   if (DEBUG) {
@@ -15,7 +17,6 @@ var COMMAND_KEYS               = [91, 93]; // left and right command keys
 var OPEN_LINK_KEY             = 13; // enter
 var OPEN_COMMENTS_KEY         = 67; // c
 
-var SCROLLOFF = 3;
 var COMMAND = "command";
 
 var HIGHLIGHTED_BACKGROUND_COLOR = "white";
@@ -97,7 +98,7 @@ function openComments(table, index, isCommandPressed) {
   var window_name = isCommandPressed ? "_blank" : "_self";
 
   window.open(url, window_name);
-  window.focus();
+  //window.focus();
 }
 
 

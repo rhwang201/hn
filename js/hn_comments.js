@@ -1,13 +1,17 @@
-// TODO click through root node
+var COMMAND_KEYS              = [91, 93]; // left and right command keys
+var SHIFT_KEY                 = 16;
 
-var DOWN_KEY                  = 106;  // j
-var UP_KEY                    = 107;  // k
+var DOWN_KEY                  = 74;  // j
+var UP_KEY                    = 75;  // k
 
-var DOWN_SIBLING_KEY          = 74;   // <shift-j>
-var UP_SIBLING_KEY            = 75;   // <shift-k>
+var DOWN_SIBLING_KEY          = -1;   // <shift-j>
+var UP_SIBLING_KEY            = -2;   // <shift-k>
 
-var PARENT_KEY                = 112;  // p
-var TOP_KEY                   = 116;  // t
+var PARENT_KEY                = 80;  // p
+var TOP_KEY                   = 84;  // t
+
+var COMMAND = "command";
+var SHIFT = "shift";
 
 var OPEN_LINK_KEY             = 13; // enter
 
@@ -135,6 +139,10 @@ function moveDown(node) {
  * Move up: previous sibling rightmost, else parent
  */
 function moveUp(node) {
+  if (!node.parent || !node.parent.children) {
+    return node;
+  }
+
   var i = node.parent.children.indexOf(node) - 1;
   if (i > -1) {
     node = node.parent.children[i];
@@ -153,6 +161,19 @@ function scrollIfNecessary(el) {
   $('html, body').animate({ scrollTop: top }, 1);
 }
 
+function openLink(node, isCommandPressed) {
+  if (node.parent) {
+    return;
+  }
+  var athing = $(node.value).find(".athing");
+  var link = $(athing).find("td")[2];
+  var url = $(link).find("a")[0].href;
+
+  var window_name = isCommandPressed ? "_blank" : "_self";
+
+  window.open(url, window_name);
+}
+
 
 
 // Begin main.
@@ -164,10 +185,26 @@ $(document).ready(function() {
   var current_node = tree;
   highlightComment(current_node.value, HIGHLIGHTED_BACKGROUND_COLOR);
 
-  $(document.body).on('keypress', function(e) {
+  var pressedKeys = [];
+  $(document.body).on('keydown', function(e) {
     var keyCode = e.keyCode;
+    if (COMMAND_KEYS.indexOf(keyCode) > -1) {
+      pressedKeys.push(COMMAND);
+    }
+    if (keyCode === SHIFT_KEY) {
+      pressedKeys.push(SHIFT);
+    }
+
+    var isCommandPressed = pressedKeys.indexOf(COMMAND) > -1;
+    var isShiftPressed = pressedKeys.indexOf(SHIFT) > -1;
     var prevNode = current_node;
     var i;
+
+    if (keyCode === DOWN_KEY && isShiftPressed) {
+      keyCode = DOWN_SIBLING_KEY;
+    } else if (keyCode === UP_KEY && isShiftPressed) {
+      keyCode = UP_SIBLING_KEY;
+    }
 
     switch (keyCode) {
       case DOWN_KEY:
@@ -213,11 +250,32 @@ $(document).ready(function() {
         scrollIfNecessary(current_node.value);
         break;
       case TOP_KEY:
-        // TODO
+        while (current_node.parent && current_node.parent.parent) {
+          highlightComment(current_node.value, DEFAULT_BACKGROUND_COLOR);
+          current_node = current_node.parent;
+        }
+        highlightComment(current_node.value, HIGHLIGHTED_BACKGROUND_COLOR);
+        scrollIfNecessary(current_node.value);
         break;
       case OPEN_LINK_KEY:
-        // TODO
+        openLink(current_node, isCommandPressed);
         break;
+    }
+  });
+
+  $(document.body).on('keyup', function(e) {
+    if (COMMAND_KEYS.indexOf(e.keyCode) > -1) {
+      var i = pressedKeys.indexOf(COMMAND);
+      if (i > -1) {
+        pressedKeys.splice(i, 1);
+      }
+    }
+
+    if (e.keyCode === SHIFT_KEY) {
+      var i = pressedKeys.indexOf(SHIFT);
+      if (i > -1) {
+        pressedKeys.splice(i, 1);
+      }
     }
   });
 });
