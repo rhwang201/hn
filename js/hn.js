@@ -18,8 +18,6 @@ var OPEN_LINK_KEY             = 13; // enter
 var OPEN_COMMENTS_KEY         = 67; // c
 
 var SCROLLOFF = 3;
-var UP = "up";
-var DOWN = "down";
 var COMMAND = "command";
 
 var HIGHLIGHTED_BACKGROUND_COLOR = "white";
@@ -110,12 +108,12 @@ $(document).ready(function() {
       case DOWN_KEY:
         element_index = Math.min(element_index + 1, NUMBER_ROWS_PER_PAGE - 1);
         highlightTableRows(table, element_index);
-        scrollIfNecessary(table, element_index, DOWN);
+        scrollIfNecessary(table, element_index);
         break;
       case UP_KEY:
         element_index = Math.max(element_index - 1, 0);
         highlightTableRows(table, element_index);
-        scrollIfNecessary(table, element_index, UP);
+        scrollIfNecessary(table, element_index);
         break;
       case OPEN_LINK_KEY:
         openLink(table, element_index, isCommandPressed);
