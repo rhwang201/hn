@@ -16,6 +16,10 @@
       "js": ["bower_components/jquery/dist/jquery.min.js", "js/hn.js"]
     },
     {
+      "matches": ["https://news.ycombinator.com/news*"],
+      "js": ["bower_components/jquery/dist/jquery.min.js", "js/hn.js"]
+    },
+    {
       "matches": ["https://news.ycombinator.com/item*"],
       "js": ["bower_components/jquery/dist/jquery.min.js", "bower_components/underscore-min.js", "js/hn_comments.js"]
     }

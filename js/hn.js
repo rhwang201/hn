@@ -1,5 +1,3 @@
-// TODO scroll to more
-
 var DEBUG = false;
 function log(msg) {
   if (DEBUG) {
@@ -29,6 +27,11 @@ var DEFAULT_BACKGROUND_COLOR = "#F6F6EF";
 function highlightTableRows(table, index) {
   var rows = table.find("tr");
   var row_index = index * 3;
+
+  var more = rows[index * 3 + 1];
+  var moreSelected = index === NUMBER_ROWS_PER_PAGE;
+  var background_color = moreSelected ? HIGHLIGHTED_BACKGROUND_COLOR : DEFAULT_BACKGROUND_COLOR;
+  $(more).css("background-color", background_color);
 
   for (var i = 0; i < rows.length; i++) {
     var row = rows[i];
@@ -61,10 +64,16 @@ function openLink(table, index, isCommandPressed) {
   var rows = table.find("tr");
   var row_index = index * 3;
 
-  var row = $(rows[row_index]);
-  var title = $(row.find("td:nth-of-type(3)"));
-  var link = title.children("a");
-  var url = link[0].href;
+  if (index === NUMBER_ROWS_PER_PAGE) {
+    var more = rows[index * 3 + 1];
+    var url = $(more).find("a")[0].href;
+  } else {
+    var row = $(rows[row_index]);
+    var title = $(row.find("td:nth-of-type(3)"));
+    var link = title.children("a");
+    var url = link[0].href;
+  }
+
   var window_name = isCommandPressed ? "_blank" : "_self";
 
   window.open(url, window_name);
@@ -76,6 +85,10 @@ function openLink(table, index, isCommandPressed) {
 function openComments(table, index, isCommandPressed) {
   var rows = table.find("tr");
   var row_index = index * 3 + 1;
+
+  if (index === NUMBER_ROWS_PER_PAGE) {
+    return;
+  }
 
   var row = $(rows[row_index]);
   var subtext = $(row.find("td.subtext"));
@@ -106,7 +119,7 @@ $(document).ready(function() {
     var isCommandPressed = pressedKeys.indexOf(COMMAND) > -1;
     switch (keyCode) {
       case DOWN_KEY:
-        element_index = Math.min(element_index + 1, NUMBER_ROWS_PER_PAGE - 1);
+        element_index = Math.min(element_index + 1, NUMBER_ROWS_PER_PAGE);
         highlightTableRows(table, element_index);
         scrollIfNecessary(table, element_index);
         break;
