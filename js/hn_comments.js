@@ -10,13 +10,13 @@ var UP_SIBLING_KEY            = -2;   // <shift-k>
 var PARENT_KEY                = 80;  // p
 var TOP_KEY                   = 84;  // t
 
-var COMMAND = "command";
-var SHIFT = "shift";
+var COMMAND                   = "command";
+var SHIFT                     = "shift";
 
 var OPEN_LINK_KEY             = 13; // enter
 
-var HIGHLIGHTED_BACKGROUND_COLOR = "white";
-var DEFAULT_BACKGROUND_COLOR = "#F6F6EF";
+var HIGHLIGHTED_BACKGROUND_COLOR  = "white";
+var DEFAULT_BACKGROUND_COLOR      = "#F6F6EF";
 
 var comment_tree = $(".comment-tree");
 
@@ -65,7 +65,7 @@ function findRightMostNode(root, depth) {
     });
 
     queue = _.reduce(children, function(a, b) {
-      return a.concat(b)
+      return a.concat(b);
     });
     depth = depth - 1;
   }
@@ -87,16 +87,17 @@ function linkParents(root) {
       return node ? node.children : [];
     });
     queue = _.reduce(children, function(a, b) {
-      return a.concat(b)
+      return a.concat(b);
     });
   }
 }
 
 function highlightComment(row, color) {
+  var borderStyle;
   if (row.nodeName === "TABLE") {
     $(row).css("background-color", color);
 
-    var borderStyle = color === HIGHLIGHTED_BACKGROUND_COLOR ? "dotted" : "none";
+    borderStyle = color === HIGHLIGHTED_BACKGROUND_COLOR ? "dotted" : "none";
     $(row).css("border-style", borderStyle);
     $(row).css("border-width", "thin");
   } else {
@@ -106,7 +107,7 @@ function highlightComment(row, color) {
     $(votelinks).css("background-color", color);
     $(dflt).css("background-color", color);
 
-    var borderStyle = color === HIGHLIGHTED_BACKGROUND_COLOR ? "dotted" : "none";
+    borderStyle = color === HIGHLIGHTED_BACKGROUND_COLOR ? "dotted" : "none";
     $(votelinks).css("border-style", borderStyle);
     $(dflt).css("border-style", borderStyle);
     $(votelinks).css("border-width", "thin");
@@ -126,7 +127,7 @@ function moveDown(node) {
         return node.parent.children[i];
       } else {
         do {
-          var i = node.parent.children.indexOf(node) + 1;
+          i = node.parent.children.indexOf(node) + 1;
           node = node.parent;
         } while (i >= node.children.length);
 
@@ -264,15 +265,16 @@ $(document).ready(function() {
   });
 
   $(document.body).on('keyup', function(e) {
+    var i;
     if (COMMAND_KEYS.indexOf(e.keyCode) > -1) {
-      var i = pressedKeys.indexOf(COMMAND);
+      i = pressedKeys.indexOf(COMMAND);
       if (i > -1) {
         pressedKeys.splice(i, 1);
       }
     }
 
     if (e.keyCode === SHIFT_KEY) {
-      var i = pressedKeys.indexOf(SHIFT);
+      i = pressedKeys.indexOf(SHIFT);
       if (i > -1) {
         pressedKeys.splice(i, 1);
       }

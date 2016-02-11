@@ -13,14 +13,21 @@ var NUMBER_ROWS_PER_PAGE = 30;
 
 var DOWN_KEY                  = 74; // j
 var UP_KEY                    = 75; // k
-var COMMAND_KEYS               = [91, 93]; // left and right command keys
+
+var COMMAND_KEYS              = [91, 93]; // left and right command keys
+var SHIFT_KEY                 = 16;
+
 var OPEN_LINK_KEY             = 13; // enter
 var OPEN_COMMENTS_KEY         = 67; // c
 
-var COMMAND = "command";
+var HELP_KEY_NO_SHIFT         = 191;  // ?
+var HELP_KEYCODE              = -1;
 
-var HIGHLIGHTED_BACKGROUND_COLOR = "white";
-var DEFAULT_BACKGROUND_COLOR = "#F6F6EF";
+var COMMAND = "command";
+var SHIFT = "shift";
+
+var HIGHLIGHTED_BACKGROUND_COLOR  = "white";
+var DEFAULT_BACKGROUND_COLOR      = "#F6F6EF";
 
 /**
  * Highlight the three tr's for element index in table.
@@ -36,7 +43,6 @@ function highlightTableRows(table, index) {
 
   for (var i = 0; i < rows.length; i++) {
     var row = rows[i];
-    var background_color;
     if (row_index <= i && i < row_index + 3) {
       background_color = HIGHLIGHTED_BACKGROUND_COLOR;
     } else {
@@ -65,14 +71,15 @@ function openLink(table, index, isCommandPressed) {
   var rows = table.find("tr");
   var row_index = index * 3;
 
+  var url;
   if (index === NUMBER_ROWS_PER_PAGE) {
     var more = rows[index * 3 + 1];
-    var url = $(more).find("a")[0].href;
+    url = $(more).find("a")[0].href;
   } else {
     var row = $(rows[row_index]);
     var title = $(row.find("td:nth-of-type(3)"));
     var link = title.children("a");
-    var url = link[0].href;
+    url = link[0].href;
   }
 
   var window_name = isCommandPressed ? "_blank" : "_self";
@@ -98,7 +105,11 @@ function openComments(table, index, isCommandPressed) {
   var window_name = isCommandPressed ? "_blank" : "_self";
 
   window.open(url, window_name);
-  //window.focus();
+}
+
+/**
+ */
+function toggleHelp() {
 }
 
 
@@ -116,8 +127,17 @@ $(document).ready(function() {
     if (COMMAND_KEYS.indexOf(keyCode) > -1) {
       pressedKeys.push(COMMAND);
     }
+    if (keyCode === SHIFT_KEY) {
+      pressedKeys.push(SHIFT);
+    }
 
+    var isShiftPressed = pressedKeys.indexOf(SHIFT) > -1;
     var isCommandPressed = pressedKeys.indexOf(COMMAND) > -1;
+
+    if (keyCode === HELP_KEY_NO_SHIFT && isShiftPressed) {
+      keyCode = HELP_KEYCODE;
+    }
+
     switch (keyCode) {
       case DOWN_KEY:
         element_index = Math.min(element_index + 1, NUMBER_ROWS_PER_PAGE);
@@ -135,13 +155,24 @@ $(document).ready(function() {
       case OPEN_COMMENTS_KEY:
         openComments(table, element_index, isCommandPressed);
         break;
+      case HELP_KEYCODE:
+        toggleHelp();
+        break;
     }
 
     log('At element i=' + element_index);
   });
   $(document.body).on('keyup', function(e) {
+    var i;
     if (COMMAND_KEYS.indexOf(e.keyCode) > -1) {
-      var i = pressedKeys.indexOf(COMMAND);
+      i = pressedKeys.indexOf(COMMAND);
+      if (i > -1) {
+        pressedKeys.splice(i, 1);
+      }
+    }
+
+    if (e.keyCode === SHIFT_KEY) {
+      i = pressedKeys.indexOf(SHIFT);
       if (i > -1) {
         pressedKeys.splice(i, 1);
       }
