@@ -14,6 +14,10 @@ var NUMBER_ROWS_PER_PAGE = 30;
 var DOWN_KEY                  = 74; // j
 var UP_KEY                    = 75; // k
 
+var TOP_KEY                   = 71; // g
+var BOTTOM_KEY_NO_SHIFT       = 71; // G
+var BOTTOM_KEYCODE            = -2;
+
 var COMMAND_KEYS              = [91, 93]; // left and right command keys
 var SHIFT_KEY                 = 16;
 
@@ -137,6 +141,9 @@ $(document).ready(function() {
     if (keyCode === HELP_KEY_NO_SHIFT && isShiftPressed) {
       keyCode = HELP_KEYCODE;
     }
+    if (keyCode === BOTTOM_KEY_NO_SHIFT && isShiftPressed) {
+      keyCode = BOTTOM_KEYCODE;
+    }
 
     switch (keyCode) {
       case DOWN_KEY:
@@ -146,6 +153,16 @@ $(document).ready(function() {
         break;
       case UP_KEY:
         element_index = Math.max(element_index - 1, 0);
+        highlightTableRows(table, element_index);
+        scrollIfNecessary(table, element_index);
+        break;
+      case TOP_KEY:
+        element_index = 0;
+        highlightTableRows(table, element_index);
+        scrollIfNecessary(table, element_index);
+        break;
+      case BOTTOM_KEYCODE:
+        element_index = NUMBER_ROWS_PER_PAGE;
         highlightTableRows(table, element_index);
         scrollIfNecessary(table, element_index);
         break;
