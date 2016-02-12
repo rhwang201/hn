@@ -8,15 +8,7 @@
 
   "content_scripts": [
     {
-      "matches": ["https://news.ycombinator.com/"],
-      "js": ["bower_components/jquery/dist/jquery.min.js", "js/hn.js"]
-    },
-    {
-      "matches": ["https://news.ycombinator.com/best*"],
-      "js": ["bower_components/jquery/dist/jquery.min.js", "js/hn.js"]
-    },
-    {
-      "matches": ["https://news.ycombinator.com/news*"],
+      "matches": ["https://news.ycombinator.com/", "https://news.ycombinator.com/best*", "https://news.ycombinator.com/news*"],
       "js": ["bower_components/jquery/dist/jquery.min.js", "js/hn.js"]
     },
     {
