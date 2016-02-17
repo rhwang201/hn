@@ -1,0 +1,33 @@
+{
+  "name": "jquery-modal",
+  "main": [
+    "jquery.modal.js",
+    "jquery.modal.css",
+    "close.png",
+    "spinner.gif"
+  ],
+  "homepage": "https://github.com/kylefox/jquery-modal",
+  "authors": [
+    "Kyle Fox <kyle.fox@gmail.com>"
+  ],
+  "description": "A lightweight and easy to use modal plugin for jQuery.",
+  "keywords": [
+    "jquery",
+    "modal"
+  ],
+  "dependencies": {
+    "jquery": "1.8.0 - 2.1.x"
+  },
+  "license": "MIT",
+  "version": "0.6.1",
+  "_release": "0.6.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.6.1",
+    "commit": "591a583e345bc1ff30d30323aee5beec2048d89f"
+  },
+  "_source": "git://github.com/kylefox/jquery-modal.git",
+  "_target": "~0.6.1",
+  "_originalSource": "jquery-modal",
+  "_direct": true
+}

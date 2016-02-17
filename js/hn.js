@@ -1,4 +1,5 @@
 // TODO help
+// TODO ugh adding bootstrap fucks everything up
 
 var DEBUG = false;
 function log(msg) {
@@ -111,9 +112,59 @@ function openComments(table, index, isCommandPressed) {
   window.open(url, window_name);
 }
 
+function insertHelpModal() {
+  $(document.body).append([
+    '<div id="help" class="modal fade" tabindex="-1" role="dialog">',
+      '<div class="modal-dialog">',
+        '<div class="modal-content">',
+          '<div class="modal-header">',
+            '<h2 class="modal-title">Help</h2>',
+          '</div>',
+          '<div class="modal-body">',
+            '<table class="table">',
+              '<tr>',
+                '<td>?</td>',
+                '<td>Show Help</td>',
+              '</tr>',
+              '<tr>',
+                '<td>j</td>',
+                '<td>Move down</td>',
+              '</tr>',
+              '<tr>',
+                '<td>k</td>',
+                '<td>Move up</td>',
+              '</tr>',
+              '<tr>',
+                '<td>\< Enter \></td>',
+                '<td>Open link in current tab</td>',
+              '</tr>',
+              '<tr>',
+                '<td>\< Command-Enter \></td>',
+                '<td>Open link in new tab</td>',
+              '</tr>',
+                '<td>c</td>',
+                '<td>Open comments in current tab</td>',
+              '</tr>',
+              '<tr>',
+                '<td>\< Command-c \></td>',
+                '<td>Open comments in new tab</td>',
+              '</tr>',
+            '</table>',
+          '</div>',
+        '</div>',
+      '</div>',
+    '</div>'
+  ].join(''));
+}
+
 /**
  */
 function toggleHelp() {
+  if ($.modal.isActive()) {
+    $.modal.close();
+  } else {
+    $("#help").modal();
+  }
 }
 
 
@@ -124,6 +175,8 @@ $(document).ready(function() {
   var element_index = 0;
 
   highlightTableRows(table, element_index);
+
+  insertHelpModal();
 
   var pressedKeys = [];
   $(document.body).on('keydown', function(e) {
