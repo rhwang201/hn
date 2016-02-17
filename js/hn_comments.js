@@ -15,6 +15,9 @@ var SHIFT                     = "shift";
 
 var OPEN_LINK_KEY             = 13; // enter
 
+var HELP_KEY_NO_SHIFT         = 191;  // ?
+var HELP_KEYCODE              = -3;
+
 var HIGHLIGHTED_BACKGROUND_COLOR  = "white";
 var DEFAULT_BACKGROUND_COLOR      = "#F6F6EF";
 
@@ -175,6 +178,66 @@ function openLink(node, isCommandPressed) {
   window.open(url, window_name);
 }
 
+function insertHelpModal() {
+  $(document.body).append([
+    '<div id="help" class="modal fade" tabindex="-1" role="dialog">',
+      '<div class="modal-dialog">',
+        '<div class="modal-content">',
+          '<div class="modal-header">',
+            '<h2 class="modal-title">Help</h2>',
+          '</div>',
+          '<div class="modal-body">',
+            '<table class="table">',
+              '<tr>',
+                '<td>?</td>',
+                '<td>Show Help</td>',
+              '</tr>',
+              '<tr>',
+                '<td>j</td>',
+                '<td>Move down one comment</td>',
+              '</tr>',
+              '<tr>',
+                '<td>k</td>',
+                '<td>Move up one comment</td>',
+              '</tr>',
+              '<tr>',
+                '<td>\< Shift-j \></td>',
+                '<td>Move down one sibling comment</td>',
+              '</tr>',
+              '<tr>',
+                '<td>\< Shift-k \></td>',
+                '<td>Move up one sibling comment</td>',
+              '</tr>',
+                '<td>p</td>',
+                '<td>Move to parent comment</td>',
+              '</tr>',
+              '<tr>',
+                '<td>t</td>',
+                '<td>Move to top comment</td>',
+              '</tr>',
+              '<tr>',
+                '<td>\< Enter \></td>',
+                '<td>Follow submission link</td>',
+              '</tr>',
+            '</table>',
+          '</div>',
+        '</div>',
+      '</div>',
+    '</div>'
+  ].join(''));
+}
+
+
+/**
+ * Toggles Help Modal.
+ */
+function toggleHelp() {
+  if ($.modal.isActive()) {
+    $.modal.close();
+  } else {
+    $("#help").modal();
+  }
+}
 
 
 // Begin main.
@@ -182,6 +245,8 @@ $(document).ready(function() {
   var rows = $(".comment-tree").find(".athing");
   var tree = constructTree(rows);
   linkParents(tree);
+
+  insertHelpModal();
 
   var current_node = tree;
   highlightComment(current_node.value, HIGHLIGHTED_BACKGROUND_COLOR);
@@ -205,6 +270,8 @@ $(document).ready(function() {
       keyCode = DOWN_SIBLING_KEY;
     } else if (keyCode === UP_KEY && isShiftPressed) {
       keyCode = UP_SIBLING_KEY;
+    } else if (keyCode === HELP_KEY_NO_SHIFT && isShiftPressed) {
+      keyCode = HELP_KEYCODE;
     }
 
     switch (keyCode) {
@@ -260,6 +327,9 @@ $(document).ready(function() {
         break;
       case OPEN_LINK_KEY:
         openLink(current_node, isCommandPressed);
+        break;
+      case HELP_KEYCODE:
+        toggleHelp();
         break;
     }
   });

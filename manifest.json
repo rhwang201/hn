@@ -14,7 +14,8 @@
     },
     {
       "matches": ["https://news.ycombinator.com/item*"],
-      "js": ["bower_components/jquery/dist/jquery.min.js", "bower_components/underscore-min.js", "js/hn_comments.js"]
+      "css": ["bower_components/jquery-modal/jquery.modal.css"],
+      "js": ["bower_components/jquery/dist/jquery.min.js", "bower_components/jquery-modal/jquery.modal.min.js", "bower_components/underscore-min.js", "js/hn_comments.js"]
     }
   ]
 }

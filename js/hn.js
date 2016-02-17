@@ -158,6 +158,7 @@ function insertHelpModal() {
 }
 
 /**
+ * Toggles Help Modal.
  */
 function toggleHelp() {
   if ($.modal.isActive()) {
