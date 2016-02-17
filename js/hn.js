@@ -114,7 +114,7 @@ function openComments(table, index, isCommandPressed) {
 
 function insertHelpModal() {
   $(document.body).append([
-    '<div id="help" class="modal fade" tabindex="-1" role="dialog">',
+    '<div id="help" class="modal fade" tabindex="-1" role="dialog" style="display: none;">',
       '<div class="modal-dialog">',
         '<div class="modal-content">',
           '<div class="modal-header">',
@@ -222,9 +222,23 @@ $(document).ready(function() {
         break;
       case OPEN_LINK_KEY:
         openLink(table, element_index, isCommandPressed);
+
+        if (isCommandPressed) {
+          var i = pressedKeys.indexOf(COMMAND);
+          if (i > -1) {
+            pressedKeys.splice(i, 1);
+          }
+        }
         break;
       case OPEN_COMMENTS_KEY:
         openComments(table, element_index, isCommandPressed);
+
+        if (isCommandPressed) {
+          var i = pressedKeys.indexOf(COMMAND);
+          if (i > -1) {
+            pressedKeys.splice(i, 1);
+          }
+        }
         break;
       case HELP_KEYCODE:
         toggleHelp();

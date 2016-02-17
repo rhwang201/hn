@@ -180,7 +180,7 @@ function openLink(node, isCommandPressed) {
 
 function insertHelpModal() {
   $(document.body).append([
-    '<div id="help" class="modal fade" tabindex="-1" role="dialog">',
+    '<div id="help" class="modal fade" tabindex="-1" role="dialog" style="display: none;">',
       '<div class="modal-dialog">',
         '<div class="modal-content">',
           '<div class="modal-header">',
